@@ -18,8 +18,13 @@
     "url": "https://github.com/Synorb/synorb-cli/issues"
   },
   "license": "MIT",
-  "files": ["src", "README.md", "LICENSE"],
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "test": "node --test"
-  }
+  },
+  "dependencies": {}
 }
