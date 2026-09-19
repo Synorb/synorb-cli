@@ -1,0 +1,11 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "synorb-cli",
+  "version": "0.1.1",
+  "description": "Command-line client for the Synorb REST API: authentication, stream search, manifest queries, and billing.",
+  "author": {"name": "Synorb", "url": "https://synorb.com"},
+  "homepage": "https://synorb.com",
+  "repository": "https://github.com/Synorb/synorb-cli",
+  "license": "MIT",
+  "keywords": ["synorb", "cli", "rest", "developer-tools"]
+}

@@ -1,0 +1,26 @@
+This repository holds @synorb/cli, the command-line client for the Synorb
+REST API.
+
+This is a synced, one-way mirror of cli/ in the private Synorb/synorb-v3
+monorepo. A GitHub Action writes one generated commit to this repo's main
+branch whenever the upstream path changes. Real development happens
+upstream, not here.
+
+Rules:
+- Small documentation fixes (README wording, comments) are fine as direct
+  PRs against this repo.
+- Do not merge changes to src/cli.js, test/cli.test.js, or package.json
+  scripts/dependencies directly into this repo. Open the PR for visibility,
+  but note in the description that it needs to land upstream instead — the
+  next sync overwrites anything committed here outside that pipeline.
+- No build step, no framework, no bundler. Plain ES modules. Node 18.17+.
+- Run tests with: npm test (runs node --test). No network access required.
+- src/cli.js has no runtime dependencies beyond Node core modules and the
+  global fetch.
+- Match existing style: 2-space indent, double quotes, semicolons.
+- Never put a credential in a URL or query string. Send it only via the
+  Authorization: Bearer header. Never write a token anywhere but
+  ~/.config/synorb/config.json (mode 0600).
+- When adding a subcommand, update: the expectsValue set in parseArgs (if
+  it takes a flag value), the command branch in run(), the HELP string,
+  README.md, and test/cli.test.js.

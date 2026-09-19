@@ -1,0 +1,25 @@
+{
+  "name": "@synorb/cli",
+  "version": "0.1.1",
+  "description": "Official command-line client for the Synorb REST API",
+  "type": "module",
+  "bin": {
+    "synorb": "./src/cli.js"
+  },
+  "engines": {
+    "node": ">=18.17"
+  },
+  "homepage": "https://synorb.com/docs/cli",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Synorb/synorb-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Synorb/synorb-cli/issues"
+  },
+  "license": "MIT",
+  "files": ["src", "README.md", "LICENSE"],
+  "scripts": {
+    "test": "node --test"
+  }
+}
