@@ -7,7 +7,7 @@ import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 
 // Keep in sync with package.json's "version" — nothing enforces this automatically.
-const VERSION = "0.1.1";
+const VERSION = "0.1.2";
 const DEFAULT_SITE_URL = "https://synorb.com";
 const DEFAULT_API_URL = "https://api.synorb.com";
 

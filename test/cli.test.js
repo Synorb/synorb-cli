@@ -116,5 +116,5 @@ test("the executable exposes help and version without network access", async () 
   assert.match(help.stdout, /synorb connect/);
   assert.match(help.stdout, /stream-search/);
   const version = await execFileAsync(process.execPath, ["src/cli.js", "--version"], { cwd });
-  assert.equal(version.stdout.trim(), "0.1.1");
+  assert.equal(version.stdout.trim(), "0.1.2");
 });

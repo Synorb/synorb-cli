@@ -1,6 +1,6 @@
 {
   "name": "@synorb/cli",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Official command-line client for the Synorb REST API",
   "type": "module",
   "bin": {
