@@ -4,7 +4,7 @@ import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
 
-import { parseArgs, requestJson } from "../src/cli.js";
+import { parseArgs, requestJson, run } from "../src/cli.js";
 
 const execFileAsync = promisify(execFile);
 
@@ -116,5 +116,38 @@ test("the executable exposes help and version without network access", async () 
   assert.match(help.stdout, /synorb connect/);
   assert.match(help.stdout, /stream-search/);
   const version = await execFileAsync(process.execPath, ["src/cli.js", "--version"], { cwd });
-  assert.equal(version.stdout.trim(), "0.1.2");
+  assert.equal(version.stdout.trim(), "0.1.3");
+});
+
+test("connect asks for a key with POST /api/connect/demo-key and never uses GET /connect", async () => {
+  const originalFetch = globalThis.fetch;
+  const originalWrite = process.stdout.write;
+  const calls = [];
+  const printed = [];
+  globalThis.fetch = async (url, init = {}) => {
+    calls.push({ url: String(url), method: init.method || "GET", body: init.body });
+    return new Response(JSON.stringify({ api_key: "demo-key-123", visitor_token: "vt" }), {
+      status: 200,
+      headers: { "content-type": "application/json" },
+    });
+  };
+  process.stdout.write = (chunk) => {
+    printed.push(String(chunk));
+    return true;
+  };
+  try {
+    await run(["connect", "--site-url", "https://site.example.test"]);
+  } finally {
+    globalThis.fetch = originalFetch;
+    process.stdout.write = originalWrite;
+  }
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].url, "https://site.example.test/api/connect/demo-key");
+  assert.equal(calls[0].method, "POST");
+  assert.deepEqual(JSON.parse(calls[0].body), { client: "synorb-cli" });
+  assert.match(printed.join("\n"), /demo-key-123/);
+});
+
+test("connect rejects the removed markdown format", async () => {
+  await assert.rejects(() => run(["connect", "--format", "md"]), /--format json is the only format/);
 });
