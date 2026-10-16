@@ -16,7 +16,7 @@ const HELP = `Synorb CLI ${VERSION}
 Command-line access to Synorb's agent API and hosted billing handoffs.
 
 Usage:
-  synorb connect [--format json|md] [--save]
+  synorb connect [--save]
   synorb profile [--token TOKEN]
   synorb stream-search QUERY [--page-size N] [--token TOKEN]
   synorb manifests [options] [--token TOKEN]
@@ -184,13 +184,15 @@ async function run(argv) {
 
   if (command === "connect") {
     const format = options.format || "json";
-    if (!new Set(["json", "md"]).has(format)) throw new Error("--format must be json or md");
-    const result = await requestJson(`${siteUrl}/connect?format=${encodeURIComponent(format)}`);
+    if (format !== "json") throw new Error("--format json is the only format. Run synorb --help.");
+    const result = await requestJson(`${siteUrl}/api/connect/demo-key`, {
+      method: "POST",
+      body: { client: "synorb-cli" },
+    });
     if (options.save) {
-      if (format !== "json" || !result?.credentials?.synorb_key) {
-        throw new Error("--save requires JSON connect output containing credentials.synorb_key");
-      }
-      const path = await saveToken(result.credentials.synorb_key, apiUrl);
+      const key = result?.api_key || result?.synorb_key;
+      if (!key) throw new Error("--save needs a key in the answer, but none came back");
+      const path = await saveToken(key, apiUrl);
       result.saved_config = path;
     }
     print(result, pretty);
